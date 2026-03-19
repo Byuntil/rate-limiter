@@ -15,4 +15,10 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleRateLimitExceeded(RateLimitExceededException e) {
         return ErrorResponse.of("RATE_LIMIT_EXCEEDED", e.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ErrorResponse handleIllegalArgumentException(Exception e) {
+        return ErrorResponse.of("BAD_REQUEST", e.getMessage());
+    }
 }
