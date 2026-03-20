@@ -7,13 +7,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class FixedWindowRateLimiterTest {
+class FixedWindowRateLimiterV1Test {
 
-    private FixedWindowRateLimiter rateLimiter;
+    private FixedWindowRateLimiterV1 rateLimiter;
 
     @BeforeEach
     void setUp() {
-        rateLimiter = new FixedWindowRateLimiter();
+        rateLimiter = new FixedWindowRateLimiterV1();
     }
 
     @Test

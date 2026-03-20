@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: phase2
   application:
     name: rate-limiter
 
