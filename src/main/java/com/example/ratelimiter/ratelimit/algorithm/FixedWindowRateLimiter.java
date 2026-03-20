@@ -8,21 +8,22 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @Component
 public class FixedWindowRateLimiter implements RateLimiter {
 
-    private final ConcurrentHashMap<String, AtomicInteger> request = new ConcurrentHashMap<>();
+    private final Map<String, Integer> request = new HashMap<>();
 
     @Override
     public RateLimitResult tryAcquire(String key, int limit, int windowSeconds) {
         String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
         String value = key + ":" + now;
 
-        int count = request.computeIfAbsent(value, k -> new AtomicInteger(0)).incrementAndGet();
+        int count = request.getOrDefault(value, 0) + 1;
+        request.put(value, count);
 
         long resetAt = LocalDateTime.now()
                 .withSecond(0).withNano(0)
@@ -39,6 +40,6 @@ public class FixedWindowRateLimiter implements RateLimiter {
     @Scheduled(fixedRate = 60_000)
     public void cleanUp() {
         String currentWindow = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmm"));
-        request.keySet().removeIf(k -> !k.contains(":" + currentWindow));
+        request.entrySet().removeIf(e -> !e.getKey().contains(":" + currentWindow));
     }
 }
