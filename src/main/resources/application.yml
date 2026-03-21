@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: phase2
+    active: phase4
   application:
     name: rate-limiter
 
@@ -22,13 +22,10 @@ spring:
     show-sql: true
     defer-datasource-initialization: true
 
-  # Redis (1차에서는 사용하지 않으므로 자동 설정 비활성화)
   data:
     redis:
       host: localhost
       port: 6379
-  autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
 
 # Rate Limit 설정
 rate-limit:
